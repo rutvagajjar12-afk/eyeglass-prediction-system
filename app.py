@@ -1,139 +1,64 @@
 
-import streamlit as st
-from PIL import Image
-
-# Sidebar Navigation
-st.sidebar.title("👓 Eye Vision Screening System")
-
-page = st.sidebar.radio(
-    "Navigation",
-    ["Home", "Eye Scan", "Vision Test", "Questionnaire", "Results"]
-)
-
-# Session State
-if "score" not in st.session_state:
-    st.session_state.score = 0
-
-# Home Page
-if page == "Home":
-
-    st.title("👓 AI Eye Vision Screening System")
-
-    st.write("""
-    Welcome to the AI Eye Vision Screening System.
-
-    Features:
-    - Eye Image Upload
-    - Vision Test
-    - Eye Health Questionnaire
-    - Result Analysis
-    """)
-
-# Eye Scan Page
-elif page == "Eye Scan":
-
-    st.title("📷 Eye Scan")
-
-    uploaded_file = st.file_uploader(
-        "Upload Eye or Face Image",
-        type=["jpg", "jpeg", "png"]
-    )
-
-    if uploaded_file is not None:
-
-        image = Image.open(uploaded_file)
-
-        st.image(
-            image,
-            caption="Uploaded Image",
-            use_container_width=True
-        )
-
-        st.success("✅ Image Uploaded Successfully")
-
-# Vision Test Page
 elif page == "Vision Test":
 
     st.title("🔍 Vision Test")
 
-    st.subheader("Can you read these letters?")
+    st.subheader("Test 1: Large Letters")
 
-    st.markdown("## E F P T O Z")
-
-    vision_test = st.radio(
-        "Select your answer:",
-        ["Yes", "No"]
+    st.markdown(
+        "<h1 style='text-align:center;'>E F P T O Z</h1>",
+        unsafe_allow_html=True
     )
 
-    if vision_test == "No":
-        st.session_state.score += 1
-
-# Questionnaire Page
-elif page == "Questionnaire":
-
-    st.title("📝 Vision Questionnaire")
-
-    q1 = st.radio(
-        "Do you experience blurry vision?",
-        ["Yes", "No"]
+    test1 = st.radio(
+        "Can you read Test 1 clearly?",
+        ["Yes", "No"],
+        key="test1"
     )
 
-    q2 = st.radio(
-        "Do you get headaches while reading?",
-        ["Yes", "No"]
+    st.divider()
+
+    st.subheader("Test 2: Medium Letters")
+
+    st.markdown(
+        "<h3 style='text-align:center;'>D E F P O T E C</h3>",
+        unsafe_allow_html=True
     )
 
-    q3 = st.radio(
-        "Do you squint while looking at distant objects?",
-        ["Yes", "No"]
+    test2 = st.radio(
+        "Can you read Test 2 clearly?",
+        ["Yes", "No"],
+        key="test2"
     )
 
-    q4 = st.radio(
-        "Do your eyes feel tired after using a mobile or computer?",
-        ["Yes", "No"]
+    st.divider()
+
+    st.subheader("Test 3: Small Letters")
+
+    st.markdown(
+        "<p style='font-size:18px;text-align:center;'>L P E D F C T O Z</p>",
+        unsafe_allow_html=True
     )
 
-    if st.button("Save Answers"):
-
-        score = 0
-
-        if q1 == "Yes":
-            score += 1
-
-        if q2 == "Yes":
-            score += 1
-
-        if q3 == "Yes":
-            score += 1
-
-        if q4 == "Yes":
-            score += 1
-
-        st.session_state.score += score
-
-        st.success("Answers Saved")
-
-# Results Page
-elif page == "Results":
-
-    st.title("📊 Screening Result")
-
-    st.write(
-        f"Total Risk Score: {st.session_state.score}"
+    test3 = st.radio(
+        "Can you read Test 3 clearly?",
+        ["Yes", "No"],
+        key="test3"
     )
 
-    if st.session_state.score >= 3:
+    if st.button("Save Vision Test"):
 
-        st.warning(
-            "⚠ Possible vision issue detected. Eye examination is recommended."
-        )
+        vision_score = 0
 
-    else:
+        if test1 == "No":
+            vision_score += 1
 
-        st.success(
-            "✅ No major vision issues detected during screening."
-        )
+        if test2 == "No":
+            vision_score += 1
 
-    st.info(
-        "This is only a preliminary screening and not a medical diagnosis."
-    )
+        if test3 == "No":
+            vision_score += 1
+
+        st.session_state.score += vision_score
+
+        st.success("✅ Vision Test Saved")
